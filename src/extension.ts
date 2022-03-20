@@ -7,10 +7,19 @@ let collaborateInTeamsStatusBarItem: vscode.StatusBarItem;
 
 function getLabel(sessionId: string | null) : string {
 	if (sessionId === null) {
-		return '$broadcast) Start LiveShare session in Teams';
+		return '$(broadcast) Collaborate in Teams';
 	} else {
-		return '$(broadcast) Bring LiveShare session into Teams';
+		return '$(broadcast) Share Live Share session in Teams';
 	}
+}
+
+function generateUrl(sessionId: string) : vscode.Uri {
+
+	const appId = '81a66714-cc7c-49d5-9b49-7d3f5d60f235';
+
+	const url = `https://bing.com/?q=${sessionId}`;
+
+	return vscode.Uri.parse(`msteams:l/meeting-share?deeplinkId=${appId}&fqdn=&lm=deeplink&appContext=${encodeURI(url)}`);
 }
 
 // this method is called when your extension is activated
@@ -36,10 +45,16 @@ export function  activate({subscriptions}: vscode.ExtensionContext) {
 		if (liveshare !== null) {
 
 			if (liveshare.session.id === null) {
-				const session = await liveshare.share();
-			} 
+				await liveshare.share({suppressNotification: true});
 
-			vscode.env.openExternal(vscode.Uri.parse('http://www.google.com/?q=' + liveshare.session.id));
+				if (liveshare.session.id !== null) {
+				vscode.env.openExternal(generateUrl(liveshare.session.id));
+				} else {
+					vscode.window.showErrorMessage('Failed to start Live Share session');
+				}
+			} else {
+				vscode.env.openExternal(generateUrl(liveshare.session.id));
+			}
 		}
 	});
 
@@ -48,7 +63,7 @@ export function  activate({subscriptions}: vscode.ExtensionContext) {
 	vsls.getApi().then( (liveshare) => {
 
 		if (liveshare === null) {
-			vscode.window.showErrorMessage('LiveShare is not available');
+			vscode.window.showErrorMessage('Live Share is not available');
 		} else {
 			collaborateInTeamsStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
 			collaborateInTeamsStatusBarItem.command = commandId;
