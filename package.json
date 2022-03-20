@@ -4,14 +4,17 @@
 	"description": "Allows to transfer a Live Share session to a MS Teams meeting",
 	"icon": "icon.png",
 	"version": "1.0.0",
-	"engines": {
+	"repository": {
+		"type" : "git",
+		"url" : "https://github.com/juanmicrosoft/msteams-liveshare-integration.git"
+	  },	"engines": {
 		"vscode": "^1.65.0"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
