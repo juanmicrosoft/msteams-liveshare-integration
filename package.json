@@ -2,6 +2,7 @@
 	"name": "msteams-liveshare-integration",
 	"displayName": "MSTeams LiveShare Integration",
 	"description": "Allows to transfer a Live Share session to a MS Teams meeting",
+	"icon": "icon.png",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.65.0"
