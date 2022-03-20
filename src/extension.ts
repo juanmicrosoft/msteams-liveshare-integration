@@ -7,9 +7,9 @@ let collaborateInTeamsStatusBarItem: vscode.StatusBarItem;
 
 function getLabel(sessionId: string | null) : string {
 	if (sessionId === null) {
-		return '$(broadcast) Collaborate in Teams';
+		return 'Collaborate in Teams';
 	} else {
-		return '$(broadcast) Share Live Share session in Teams';
+		return '$(live-share) Share session in Teams';
 	}
 }
 
