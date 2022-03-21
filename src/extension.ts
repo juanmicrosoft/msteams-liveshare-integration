@@ -15,11 +15,23 @@ function getLabel(sessionId: string | null) : string {
 
 function generateUrl(sessionId: string) : vscode.Uri {
 
-	const appId = '81a66714-cc7c-49d5-9b49-7d3f5d60f235';
+	console.log(encodeURIComponent(`https://vscode.dev/liveshare/${sessionId}`));
 
-	const url = `https://bing.com/?q=${sessionId}`;
+	const appContext = {
+		"appSharingUrl": `https://vscode.dev/liveshare/${sessionId}`,
+		"appId": "9cc80a93-1d41-4bcb-8170-4b9ec9e29fbb"
+	};
 
-	return vscode.Uri.parse(`msteams:l/meeting-share?deeplinkId=${appId}&fqdn=&lm=deeplink&appContext=${encodeURI(url)}`);
+
+	console.log(encodeURIComponent(JSON.stringify(appContext)));
+
+	//const appContext = encodeURI(`{ "appSharingUrl" : "https://vscode.dev/liveshare/${sessionId}", "appId": "9cc80a93-1d41-4bcb-8170-4b9ec9e29fbb"}`);
+
+	const url = `msteams:l/meeting-share?deeplinkId=ACCC6AFE-449D-4AF3-8D3E-E8A7B3AB1280&fqdn=&lm=deeplink&appContext=${encodeURIComponent(JSON.stringify(appContext))}`;
+
+	console.log(url);
+
+	return vscode.Uri.parse(url);
 }
 
 // this method is called when your extension is activated
@@ -48,7 +60,7 @@ export function  activate({subscriptions}: vscode.ExtensionContext) {
 				await liveshare.share({suppressNotification: true});
 
 				if (liveshare.session.id !== null) {
-				vscode.env.openExternal(generateUrl(liveshare.session.id));
+					vscode.env.openExternal(generateUrl(liveshare.session.id));
 				} else {
 					vscode.window.showErrorMessage('Failed to start Live Share session');
 				}
